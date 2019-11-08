@@ -15,6 +15,23 @@ def findIssueBasedOnExpressionSearchedOnTitleAndDescription(searchString, user_i
 
     return issue
 
+def pgquery( conn, sqlcmd, args, silent=False ):
+    resultList = []
+    with conn:
+        with conn.cursor() as cur:
+            try:
+                if args is None:
+                    cur.execute(sqlcmd)
+                else:
+                    cur.execute(sqlcmd, args)
+                if silent == False:
+                    for record in cur:
+                        resultList.append(record)
+            except Exception as e:
+                if silent == False:
+                    print("db read error: ")
+                    print(e)
+    return resultList
 
 In:
 findIssueBasedOnExpressionSearchedOnTitleAndDescription('by','1')
