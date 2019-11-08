@@ -1,0 +1,33 @@
+def findIssueBasedOnExpressionSearchedOnTitleAndDescription(searchString, user_id):
+    searchString = searchString.lower()
+    query_stmt = "SELECT * FROM A3_ISSUE WHERE (LOWER(Title) LIKE '%" + searchString + "%' OR LOWER(Description) LIKE '%" 
+    query_stmt = query_stmt + searchString + "%') AND (Creator = " + user_id + " OR Resolver = " + user_id 
+    query_stmt = query_stmt + " OR Verifier = " + user_id + ")"
+    issue_db = pgquery(conn, query_stmt, None)
+    issue = [{
+        'title': row[0],
+        'creator': row[1],
+        'resolver': row[2],
+        'verifier': row[3],
+        'description': row[4],
+        'issue_id': row[5]
+    } for row in issue_db]
+
+    return issue
+
+
+In:
+findIssueBasedOnExpressionSearchedOnTitleAndDescription('by','1')
+Out:
+[{'title': 'Factorial with addition anomaly',
+  'creator': 2,
+  'resolver': 1,
+  'verifier': 2,
+  'description': 'Performing a factorial and then addition produces an off by 1 error',
+  'issue_id': 1},
+ {'title': 'Division by zero',
+  'creator': 1,
+  'resolver': 1,
+  'verifier': 1,
+  'description': "Division by 0 doesn't yield error or infinity as would be expected. Instead it results in -1.",
+  'issue_id': 2}]
